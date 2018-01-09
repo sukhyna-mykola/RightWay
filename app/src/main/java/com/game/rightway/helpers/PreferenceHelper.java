@@ -15,8 +15,7 @@ public final class PreferenceHelper {
     private static final String PREFERENCE = "preference";
 
     private static final String MAX_POINTS = "max_points";
-
-    public static final String SOUND = "sound";
+    private static final String SOUND = "sound";
 
     private PreferenceHelper(Context context) {
         sPref = context.getSharedPreferences(PREFERENCE, MODE_PRIVATE);
@@ -47,6 +46,6 @@ public final class PreferenceHelper {
     }
 
     public boolean isPlaySound() {
-        return sPref.getBoolean(SOUND, false);
+        return sPref.getBoolean(SOUND, true);
     }
 }

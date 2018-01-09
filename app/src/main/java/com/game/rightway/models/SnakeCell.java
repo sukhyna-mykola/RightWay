@@ -6,10 +6,6 @@ import android.graphics.Paint;
 
 import com.game.rightway.GameSurface;
 
-/**
- * Created by mykola on 02.01.18.
- */
-
 public class SnakeCell extends GameElement {
 
 
@@ -28,7 +24,6 @@ public class SnakeCell extends GameElement {
 
     @Override
     public void update(int interval) {
-
     }
 
 }

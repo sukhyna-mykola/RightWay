@@ -14,7 +14,10 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.game.rightway.helpers.AdHelper;
 import com.game.rightway.helpers.PreferenceHelper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 
 
 public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouchListener {
@@ -25,13 +28,14 @@ public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouc
     private TextView maxPointsText;
     private ImageButton volumeButton;
 
+    private InterstitialAd mInterstitialAd;
+
     private GamePresenter presenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new GamePresenter(getContext(), this);
-
         setRetainInstance(true);
     }
 
@@ -87,6 +91,17 @@ public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouc
             }
         });
 
+        mInterstitialAd = new InterstitialAd(getContext());
+        mInterstitialAd.setAdUnitId("ca-app-pub-1630263344353342/6852122114");
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+            }
+        });
+
         updateVolumeButtonView();
 
         return v;
@@ -119,6 +134,8 @@ public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouc
                 allertView.setVisibility(View.VISIBLE);
                 pointsText.setText(String.valueOf(points));
                 maxPointsText.setText(String.valueOf(PreferenceHelper.getInstance(getContext()).loadMaxPoints()));
+
+                AdHelper.showIntersitialAd(getContext(),mInterstitialAd);
             }
         });
 
@@ -131,10 +148,8 @@ public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouc
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 float x = event.getX();
-                float y = event.getY();
 
                 presenter.moveSnakeHead(x);
-                break;
         }
 
         return true;
@@ -159,6 +174,5 @@ public class GameFragment extends Fragment implements ViewCallbacks, View.OnTouc
             volumeButton.setImageResource(R.drawable.ic_volume_off_black_24dp);
         }
     }
-
 
 }

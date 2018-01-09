@@ -13,22 +13,24 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.game.rightway.models.BlockCell.TEXT_SIZE_PERCENT;
 
 public class WayElements {
+    private static final float RADIUS_POINTS_PERCENT = 0.07f;
+    private static final int ROW_LENGHT = 5;
+
+    private static final int MIN_PARTS_NUMBER = 12;
+    private static final int MIN_PART_SIZE = 3;
+
+    private static final float POINTS_TEXT_SIZE_PERCENT = 0.07f;
 
     private GameSurface mSurface;
 
     private LinkedList<WayRow> mWayRows;
     private List<Part> parts;
 
-    private Paint paint;
     private int totalRows;
 
-    public static final float RADIUS_POINTS_PERCENT = 0.07f;
-    public static final int ROW_LENGHT = 5;
-    private static final int MIN_PARTS_NUMBER = 12;
-    private static final int MIN_PART_SIZE = 3;
+    private Paint paint;
 
     public WayElements(GameSurface mSurface) {
         this.mSurface = mSurface;
@@ -40,7 +42,7 @@ public class WayElements {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setAntiAlias(true);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
-        paint.setTextSize(TEXT_SIZE_PERCENT * mSurface.getHeightScreen());
+        paint.setTextSize(POINTS_TEXT_SIZE_PERCENT * mSurface.getHeightScreen());
 
         addNewRow(mSurface);
 
@@ -91,28 +93,26 @@ public class WayElements {
             p.draw(c);
         }
 
-
         paint.setColor(Color.WHITE);
         c.drawCircle(mSurface.getWidthScreen() / 2, RADIUS_POINTS_PERCENT * mSurface.getHeightScreen(), RADIUS_POINTS_PERCENT * mSurface.getHeightScreen(), paint);
 
         paint.setColor(Color.BLACK);
-        c.drawText(String.valueOf(totalRows/2), mSurface.getWidthScreen() / 2, RADIUS_POINTS_PERCENT * mSurface.getHeightScreen() - (paint.descent() + paint.ascent()) / 2, paint);
-
-
+        c.drawText(String.valueOf(totalRows / 2), mSurface.getWidthScreen() / 2, RADIUS_POINTS_PERCENT * mSurface.getHeightScreen() - (paint.descent() + paint.ascent()) / 2, paint);
     }
 
 
     public void checkIntersects(Snake s) {
         for (WayRow row : mWayRows) {
-            for (int i = 0; i < ROW_LENGHT; i++) {
-                WayElement e = row.getElement(i);
-                if (e != null && !s.isDead()) {
-                    if (e.intersect(s)) {
-                        row.setElement(i, null);
-                        generateParts(e);
+            if (row.getY() >= mSurface.getHeightScreen() / 3)
+                for (int i = 0; i < ROW_LENGHT; i++) {
+                    WayElement e = row.getElement(i);
+                    if (e != null && !s.isDead()) {
+                        if (e.intersect(s)) {
+                            row.setElement(i, null);
+                            generateParts(e);
+                        }
                     }
                 }
-            }
         }
     }
 

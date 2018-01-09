@@ -57,13 +57,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/exit_btn"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="48dp"
             android:background="@drawable/button_background"
             android:drawableLeft="@drawable/ic_replay_black_24dp"
             android:padding="8dp"
-            android:text="@string/replay_game"
-            android:textSize="20sp"/>
+            android:text="@string/replay_game"/>
 
         <Button
             android:id="@+id/exit_btn"
@@ -75,7 +75,8 @@
             android:background="@drawable/button_background"
             android:drawableLeft="@drawable/ic_home_black_24dp"
             android:padding="5dp"
-            android:text="@string/exit_game"/>
+            android:text="@string/exit_game"
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/volume_controll_button"

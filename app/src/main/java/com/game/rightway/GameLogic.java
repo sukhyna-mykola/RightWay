@@ -3,9 +3,6 @@ package com.game.rightway;
 import com.game.rightway.models.Snake;
 import com.game.rightway.models.WayElements;
 
-/**
- * Created by mykola on 02.01.18.
- */
 
 public class GameLogic {
 

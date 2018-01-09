@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RightWay</string>
+    <string name="exit_game">Вихід</string>
+    <string name="replay_game">Грати знову</string>
+    <string name="result">Результат</string>
+</resources>

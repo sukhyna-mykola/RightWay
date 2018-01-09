@@ -20,8 +20,6 @@ import com.game.rightway.helpers.PreferenceHelper;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Paint p;
-
     private GameLogic model;
 
     private float widthScreen, heightScreen;
@@ -45,13 +43,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     private void configure(Context mContext) {
 
-        p = new Paint();
-        p.setTextAlign(Paint.Align.CENTER);
-        //p.setTypeface(Typeface.createFromAsset(gameActivity.getAssets(), "fonts/myFont.ttf"));
-        p.setTypeface(Typeface.MONOSPACE);
-        p.setTextAlign(Paint.Align.CENTER);
-
-
         getHolder().addCallback(this);
 
         initSoundPool();
@@ -59,8 +50,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         soundMap = new SparseArray(2);
         soundMap.put(BLOCKER_SOUND_ID, soundPool.load(mContext, R.raw.block, 1));
         soundMap.put(BONUS_SOUND_ID, soundPool.load(mContext, R.raw.bonus, 1));
-
-
     }
 
 
@@ -70,7 +59,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         } else {
             createNewSoundPool();
         }
-
     }
 
 
@@ -145,8 +133,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         if (canvas != null) {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            model.getSnake().draw(canvas);
 
+            model.getSnake().draw(canvas);
             model.getWayElements().draw(canvas);
         }
     }

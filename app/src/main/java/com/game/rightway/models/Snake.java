@@ -3,32 +3,27 @@ package com.game.rightway.models;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 
 import com.game.rightway.GameSurface;
 
 import java.util.LinkedList;
 
-/**
- * Created by mykola on 02.01.18.
- */
 
 public class Snake {
+    private static final float SNAKE_ELEMENT_WIDTH_PERCENT = 1f / 20;
+    private static final float SNAKE_ELEMENT_HEIGHT_PERCENT = 1f / 20;
 
-    private Paint p = new Paint();
+    private static final float SNAKE_BOTTOM_VELOCITY_PERCENT = 0.5f;
+    private static final float SNAKE_TOP_VELOCITY_PERCENT = -1f;
 
-    public static final float SNAKE_ELEMENT_WIDTH_PERCENT = 1f / 20;
-    public static final float SNAKE_ELEMENT_HEIGHT_PERCENT = 1f / 20;
+    private static final float SNAKE_TEXT_SIZE_PERCENT = 0.025f;
 
-    public static final float BOTTOM_SNAKE_SPEED_PERCENT = 0.5f;
-    public static final float TOP_SNAKE_SPEED_PERCENT = -1f;
-
-    public static final float TEXT_SIZE_PERCENT = 0.025f;
-
-    private LinkedList<SnakeCell> snake = new LinkedList<>();
+    private LinkedList<SnakeCell> snake;
+    private Paint paint;
 
     public Snake(GameSurface mSurface, int startSize) {
+        snake = new LinkedList<>();
 
         float widthCell = mSurface.getWidthScreen() * SNAKE_ELEMENT_WIDTH_PERCENT;
         float heightCell = mSurface.getWidthScreen() * SNAKE_ELEMENT_HEIGHT_PERCENT;
@@ -39,15 +34,16 @@ public class Snake {
 
         }
 
+        paint = new Paint();
         configurePaint(mSurface.getHeightScreen());
     }
 
     private void configurePaint(float height) {
-        p.setColor(Color.WHITE);
-        p.setTextAlign(Paint.Align.CENTER);
-        p.setAntiAlias(true);
-        p.setTextSize(TEXT_SIZE_PERCENT * height);
-        p.setTypeface(Typeface.DEFAULT_BOLD);
+        paint.setColor(Color.WHITE);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setAntiAlias(true);
+        paint.setTextSize(SNAKE_TEXT_SIZE_PERCENT * height);
+        paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
 
@@ -70,22 +66,24 @@ public class Snake {
         if (!isDead()) {
 
             SnakeCell head = getSnakeHead();
+            //check right border
             if (x < head.view.getWidthScreen() - head.shape.width()) {
                 head.shape.offsetTo(x, head.shape.top);
             } else {
-                head.shape.offsetTo(head.view.getWidthScreen() - head.shape.width() , head.shape.top);
+                head.shape.offsetTo(head.view.getWidthScreen() - head.shape.width(), head.shape.top);
             }
         }
     }
 
     public void update(int interval) {
+        SnakeCell head = getSnakeHead();
         //horizontal
         for (int i = 1; i < snake.size(); i++) {
             SnakeCell cell = snake.get(i);
-            float diff = getSnakeHead().shape.left - cell.shape.left;
-
-            if (diff != 0)
+            if (head.shape.left != cell.shape.left) {
+                float diff = head.shape.left - cell.shape.left;
                 cell.shape.offset(diff / (i + 1), 0);
+            }
         }
 
         //vertical
@@ -98,11 +96,11 @@ public class Snake {
             if (targetY < cell.view.getHeightScreen()) {
                 if (y != targetY) {
                     if (y - targetY > 0) {
-                        cell.shape.offset(0, ((1.5f / cell.view.getHeightScreen()) * y - 0.5f) * TOP_SNAKE_SPEED_PERCENT * interval);
+                        cell.shape.offset(0, ((1.5f / cell.view.getHeightScreen()) * y - 0.5f) * SNAKE_TOP_VELOCITY_PERCENT * interval);
                         if (cell.shape.top < targetY)
                             cell.shape.offsetTo(cell.shape.left, targetY);
                     } else {
-                        cell.shape.offset(0, BOTTOM_SNAKE_SPEED_PERCENT * interval);
+                        cell.shape.offset(0, SNAKE_BOTTOM_VELOCITY_PERCENT * interval);
                     }
                 }
             } else {
@@ -113,12 +111,14 @@ public class Snake {
 
 
     public void draw(Canvas c) {
+        //draw snake cells
         for (SnakeCell e : snake) {
             e.draw(c);
         }
 
+        //draw snake size text
         SnakeCell head = getSnakeHead();
-        c.drawText(String.valueOf(getSnakeSize()), head.shape.centerX(), head.shape.centerY() - head.shape.height(), p);
+        c.drawText(String.valueOf(getSnakeSize()), head.shape.centerX(), head.shape.centerY() - head.shape.height(), paint);
     }
 
     public SnakeCell getSnakeHead() {

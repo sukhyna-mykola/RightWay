@@ -5,27 +5,23 @@ import android.graphics.Canvas;
 import com.game.rightway.GameSurface;
 import com.game.rightway.helpers.Utils;
 
-/**
- * Created by mykola on 09.01.18.
- */
-
 public class Part extends GameElement {
+    private static final float PART_MIN_VELOCITY = 0.1f;
+
     private float dx, dy;
 
     public Part(float x, float y, float width, float height, GameSurface mView, int color) {
         super(x, y, width, height, mView, color);
 
-        dx = Utils.RANDOM.nextFloat() + 0.05f;
+        dx = Utils.RANDOM.nextFloat() + PART_MIN_VELOCITY;
         if (Utils.RANDOM.nextBoolean())
             dx = -dx;
 
-        dy = Utils.RANDOM.nextFloat() + 0.05f;
+        dy = Utils.RANDOM.nextFloat() + PART_MIN_VELOCITY;
         if (Utils.RANDOM.nextBoolean())
             dy = -dy;
 
-
     }
-
 
     @Override
     public void draw(Canvas c) {

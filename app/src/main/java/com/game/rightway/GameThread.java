@@ -2,21 +2,22 @@ package com.game.rightway;
 
 class GameThread extends Thread {
 
+    private static final long PAUSE_SLEEP_TIME = 10;
+
     private boolean running;
     private boolean pause;
 
     private UpdateListener updator;
 
-
     @Override
     public void run() {
-        long startTime;
         long previousFrameTime = System.currentTimeMillis();
         while (running) {
 
             while (pause) {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(PAUSE_SLEEP_TIME);
+                    previousFrameTime += PAUSE_SLEEP_TIME;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -24,7 +25,7 @@ class GameThread extends Thread {
 
             long currentFrameTime = System.currentTimeMillis();
 
-            long elapsedTimeMS = currentFrameTime-previousFrameTime;
+            long elapsedTimeMS = currentFrameTime - previousFrameTime;
 
             updator.update((int) elapsedTimeMS);
 

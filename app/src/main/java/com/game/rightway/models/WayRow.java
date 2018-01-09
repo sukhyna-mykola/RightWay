@@ -22,15 +22,13 @@ public class WayRow {
     private static final double LINE_GENERATION_PERCENT = 0.13f;
 
     private WayElement[] row;
+
     private float y;
-    private float widthRow;
-    private float heightRow;
+    private float widthRow, heightRow;
 
 
     public WayRow(GameSurface mSurface, int rowLenght, int total) {
         row = new WayElement[rowLenght];
-
-        y = -mSurface.getWidthScreen() * ROW_WIDTH_PERCENT;
 
         widthRow = mSurface.getWidthScreen() * ROW_WIDTH_PERCENT;
         heightRow = mSurface.getWidthScreen() * ROW_HEIGHT_PERCENT;
@@ -41,13 +39,15 @@ public class WayRow {
             generateRandom(mSurface, total);
         }
 
+
+        y = -heightRow;
     }
 
     private void generateLine(GameSurface mSurface, int mTotal) {
         for (int i = 0; i < row.length; i++) {
             float width = mSurface.getWidthScreen() * BLOCK_WIDTH_PERCENT;
             float height = mSurface.getWidthScreen() * BLOCK_HEIGHT_PERCENT;
-            row[i] = new BlockCell(i * widthRow, -widthRow, width, height, mSurface, Color.RED, generateBlockCoins(mTotal));
+            row[i] = new BlockCell(i * widthRow+(widthRow-width)/2, -heightRow+(heightRow-height)/2, width, height, mSurface, Color.RED, generateBlockCoins(mTotal));
 
         }
     }
@@ -59,11 +59,11 @@ public class WayRow {
                 if (Utils.RANDOM.nextBoolean()) {//додати перешкоду
                     float width = mSurface.getWidthScreen() * BLOCK_WIDTH_PERCENT;
                     float height = mSurface.getWidthScreen() * BLOCK_HEIGHT_PERCENT;
-                    row[i] = new BlockCell(i * widthRow, -widthRow, width, height, mSurface, Color.RED, generateBlockCoins(mTotal));
+                    row[i] = new BlockCell(i * widthRow+(widthRow-width)/2, -heightRow+(heightRow-height)/2, width, height, mSurface, Color.RED, generateBlockCoins(mTotal));
                 } else {//додати бонус
                     float width = mSurface.getWidthScreen() * BONUS_WIDTH_PERCENT;
                     float height = mSurface.getWidthScreen() * BONUS_HEIGHT_PERCENT;
-                    row[i] = new BonusCell(i * widthRow + heightRow / 2, -heightRow + heightRow / 2, width, height, mSurface, Color.YELLOW, generateBonusCoins(mTotal));
+                    row[i] = new BonusCell(i * widthRow + widthRow / 2 - width / 2, -heightRow + heightRow / 2 - height / 2, width, height, mSurface, Color.YELLOW, generateBonusCoins(mTotal));
                 }
 
             }

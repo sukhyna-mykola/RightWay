@@ -10,5 +10,4 @@ public interface ViewCallbacks {
 
     void showEndGameAllert(int coins);
 
-
 }
