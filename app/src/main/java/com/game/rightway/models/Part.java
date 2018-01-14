@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import com.game.rightway.GameSurface;
 import com.game.rightway.helpers.Utils;
 
-public class Part extends GameElement {
+public  class Part extends GameElement {
     private static final float PART_MIN_VELOCITY = 0.1f;
 
     private float dx, dy;
@@ -20,7 +20,6 @@ public class Part extends GameElement {
         dy = Utils.RANDOM.nextFloat() + PART_MIN_VELOCITY;
         if (Utils.RANDOM.nextBoolean())
             dy = -dy;
-
     }
 
     @Override

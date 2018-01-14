@@ -1,12 +1,9 @@
 package com.game.rightway.models;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
+import android.util.Log;
 
 import com.game.rightway.GameSurface;
-import com.game.rightway.helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,13 +12,14 @@ import java.util.List;
 
 
 public class WayElements {
-    private static final float RADIUS_POINTS_PERCENT = 0.07f;
+
+    protected static float velocity;
+
+    protected static final float MIN_VELOCITY = 0.3f;
+    protected static final float START_VELOCITY = 0.5f;
+    protected static final float MAX_VELOCITY = 0.9f;
+
     private static final int ROW_LENGHT = 5;
-
-    private static final int MIN_PARTS_NUMBER = 12;
-    private static final int MIN_PART_SIZE = 3;
-
-    private static final float POINTS_TEXT_SIZE_PERCENT = 0.07f;
 
     private GameSurface mSurface;
 
@@ -30,22 +28,16 @@ public class WayElements {
 
     private int totalRows;
 
-    private Paint paint;
 
     public WayElements(GameSurface mSurface) {
         this.mSurface = mSurface;
 
+        velocity = START_VELOCITY;
+
         mWayRows = new LinkedList<>();
         parts = new ArrayList<>();
 
-        paint = new Paint();
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setAntiAlias(true);
-        paint.setTypeface(Typeface.DEFAULT_BOLD);
-        paint.setTextSize(POINTS_TEXT_SIZE_PERCENT * mSurface.getHeightScreen());
-
         addNewRow(mSurface);
-
     }
 
     private void addNewRow(GameSurface mSurface) {
@@ -56,6 +48,13 @@ public class WayElements {
 
 
     public void update(int interval) {
+
+        if (velocity < MAX_VELOCITY) {
+            if (velocity < START_VELOCITY)
+                velocity += 0.01f;
+
+            velocity += interval / 250_000.0;
+        }
 
         WayRow first = mWayRows.getFirst();
         if (first.getY() >= 0)
@@ -93,13 +92,7 @@ public class WayElements {
             p.draw(c);
         }
 
-        paint.setColor(Color.WHITE);
-        c.drawCircle(mSurface.getWidthScreen() / 2, RADIUS_POINTS_PERCENT * mSurface.getHeightScreen(), RADIUS_POINTS_PERCENT * mSurface.getHeightScreen(), paint);
-
-        paint.setColor(Color.BLACK);
-        c.drawText(String.valueOf(totalRows / 2), mSurface.getWidthScreen() / 2, RADIUS_POINTS_PERCENT * mSurface.getHeightScreen() - (paint.descent() + paint.ascent()) / 2, paint);
     }
-
 
     public void checkIntersects(Snake s) {
         for (WayRow row : mWayRows) {
@@ -108,27 +101,16 @@ public class WayElements {
                     WayElement e = row.getElement(i);
                     if (e != null && !s.isDead()) {
                         if (e.intersect(s)) {
-                            row.setElement(i, null);
-                            generateParts(e);
+                            if (e.points == 0) {
+                                row.setElement(i, null);
+                                parts.addAll(e.generateParts());
+                            } else {
+                                parts.addAll(s.generateParts());
+                            }
                         }
                     }
                 }
         }
     }
 
-    private void generateParts(WayElement mE) {
-        int number = Utils.RANDOM.nextInt(MIN_PARTS_NUMBER) + MIN_PARTS_NUMBER;
-
-        for (int i = 0; i < number; i++) {
-            float w = Utils.RANDOM.nextInt(MIN_PART_SIZE) + MIN_PART_SIZE;
-            float h = Utils.RANDOM.nextInt(MIN_PART_SIZE) + MIN_PART_SIZE;
-
-            parts.add(new Part(mE.shape.centerX(), mE.shape.centerY(), w, h, mSurface, mE.color));
-        }
-    }
-
-
-    public int getTotalRows() {
-        return totalRows;
-    }
 }

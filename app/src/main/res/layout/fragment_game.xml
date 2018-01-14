@@ -11,46 +11,48 @@
     <RelativeLayout
         android:id="@+id/end_game_allert"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/points"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:text="@string/result"
-            android:textColor="@color/colorWhite"
-            android:textSize="40sp"/>
-
-        <TextView
-            android:id="@+id/points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/max_points"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/result_background"
-            android:gravity="center"
-            android:minHeight="125dp"
-            android:minWidth="125dp"
-            android:padding="8dp"
-            android:textColor="@color/colorBlack"
-            android:textSize="55sp"
-            android:typeface="normal"/>
-
-        <TextView
-            android:id="@+id/max_points"
+        <LinearLayout
+            android:id="@+id/result_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="32dp"
-            android:drawableTop="@drawable/ic_sharp_crown"
+            android:background="@drawable/button_background"
             android:gravity="center"
-            android:text="100"
-            android:textColor="@color/colorWhite"
-            android:textSize="35sp"
-            android:typeface="normal"/>
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/points"
+                android:layout_margin="8dp"
+                android:text="@string/result"
+                android:textSize="40sp"/>
+
+            <TextView
+                android:id="@+id/points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/max_points"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:textSize="55sp"
+                android:typeface="normal"/>
+
+            <TextView
+                android:id="@+id/max_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="32dp"
+                android:drawableTop="@drawable/ic_sharp_crown"
+                android:gravity="center"
+                android:textSize="35sp"
+                android:typeface="normal"/>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/replay_btn"
@@ -66,6 +68,7 @@
             android:text="@string/replay_game"/>
 
         <Button
+
             android:id="@+id/exit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </FrameLayout>

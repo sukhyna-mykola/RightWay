@@ -49,7 +49,7 @@ public class GameLogic {
     }
 
     public int getPoints() {
-        return wayElements.getTotalRows();
+        return snake.getPoints();
     }
 
 }

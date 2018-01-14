@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 
 import com.game.rightway.GameSurface;
 
+import java.util.List;
+
 
 public abstract class GameElement {
 
@@ -15,7 +17,6 @@ public abstract class GameElement {
     protected int color;
 
     protected Paint paint = new Paint();
-
 
     public GameElement(float x, float y, float width, float height, GameSurface mView, int color) {
         this.view = mView;
@@ -28,7 +29,6 @@ public abstract class GameElement {
         paint.setAntiAlias(true);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
-
 
     public abstract void draw(Canvas c);
 

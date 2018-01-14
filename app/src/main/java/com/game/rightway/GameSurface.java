@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -24,11 +25,16 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     private float widthScreen, heightScreen;
 
+    private static final float POINTS_TEXT_SIZE_PERCENT = 0.06f;
+    private static final float POINTS_MARGIN_PERCENT = 0.02f;
+
     public static final int BLOCKER_SOUND_ID = 0;
     public static final int BONUS_SOUND_ID = 1;
 
     private SoundPool soundPool;
     private SparseArray<Integer> soundMap;
+
+    private Paint paint;
 
 
     public GameSurface(Context context) {
@@ -50,6 +56,12 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         soundMap = new SparseArray(2);
         soundMap.put(BLOCKER_SOUND_ID, soundPool.load(mContext, R.raw.block, 1));
         soundMap.put(BONUS_SOUND_ID, soundPool.load(mContext, R.raw.bonus, 1));
+
+        paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setAntiAlias(true);
+        paint.setTypeface(Typeface.DEFAULT_BOLD);
+
     }
 
 
@@ -89,6 +101,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
         widthScreen = w;
         heightScreen = h;
+
+        paint.setTextSize(POINTS_TEXT_SIZE_PERCENT * getHeightScreen());
     }
 
     @Override
@@ -135,7 +149,15 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
             model.getSnake().draw(canvas);
+
             model.getWayElements().draw(canvas);
+
+            if (model.getPoints() > 0) {
+                String text = String.valueOf(model.getPoints());
+                Rect bounds = new Rect();
+                paint.getTextBounds(text, 0, text.length(), bounds);
+                canvas.drawText(text, widthScreen - bounds.width() - widthScreen * POINTS_MARGIN_PERCENT, widthScreen * POINTS_MARGIN_PERCENT + bounds.height(), paint);
+            }
         }
     }
 

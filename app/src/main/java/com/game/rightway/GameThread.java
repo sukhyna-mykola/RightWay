@@ -12,20 +12,25 @@ class GameThread extends Thread {
     @Override
     public void run() {
         long previousFrameTime = System.currentTimeMillis();
+        long beforePauseTime;
         while (running) {
 
             while (pause) {
+                beforePauseTime = System.currentTimeMillis();
                 try {
                     Thread.sleep(PAUSE_SLEEP_TIME);
-                    previousFrameTime += PAUSE_SLEEP_TIME;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                previousFrameTime += (System.currentTimeMillis() - beforePauseTime);
             }
 
             long currentFrameTime = System.currentTimeMillis();
 
             long elapsedTimeMS = currentFrameTime - previousFrameTime;
+
+            if (elapsedTimeMS > 100)
+                elapsedTimeMS = 100;
 
             updator.update((int) elapsedTimeMS);
 
